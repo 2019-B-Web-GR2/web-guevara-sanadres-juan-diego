@@ -33,9 +33,9 @@ export class UsuarioController {
     usuarioCreateDTO.nombre = usuario.nombre;
     usuarioCreateDTO.cedula = usuario.cedula;
     const errores = await validate(usuarioCreateDTO);
+    console.log(errores);
     if(errores.length > 0 ){
       throw new BadRequestException('Error validando');
-      
     }else{
       return this._usuarioService.crearUno(usuario);
     }

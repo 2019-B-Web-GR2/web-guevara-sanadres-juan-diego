@@ -1,15 +1,15 @@
-import { IsNotEmpty, IsNumberString, IsString, Max, Min } from 'class-validator';
+import { IsNotEmpty, IsNumberString, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
 
 export class UsuarioCreateDto {
   @IsNotEmpty()
   @IsString()
-  @Min(3)
-  @Max(80)
+  @MinLength(3)
+  @MaxLength(80)
   nombre:string;
 
   @IsNotEmpty()
   @IsNumberString()
-  @Min(10)
-  @Max(10)
+  @MinLength(10)
+  @MaxLength(10)
   cedula:string;
 }
