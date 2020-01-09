@@ -1,4 +1,16 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Query, Session } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+  Session,
+} from '@nestjs/common';
 import {UsuarioService} from "./usuario.service";
 import {UsuarioEntity} from "./usuario.entity";
 import { DeleteResult } from 'typeorm';
@@ -13,6 +25,16 @@ export class UsuarioController {
     private readonly _usuarioService: UsuarioService,
   ) {
 
+  }
+
+  @Get('logout')
+  logout(
+    @Session() session,
+    @Req() req
+  ){
+    session.usuario = undefined;
+    req.session.destroy();
+    return session;
   }
 
   @Post('login')
