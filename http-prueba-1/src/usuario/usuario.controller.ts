@@ -8,7 +8,7 @@ import {
   Post,
   Put,
   Query,
-  Req,
+  Req, Res,
   Session,
 } from '@nestjs/common';
 import {UsuarioService} from "./usuario.service";
@@ -27,6 +27,17 @@ export class UsuarioController {
 
   }
 
+  @Get('ejemploEJS')
+  ejemploEJS(
+    @Res() res
+  ){
+    res.render('ejemplo',{
+      datos:{
+        nombre:'Juxx',
+      },
+    });
+  }
+
   @Get('logout')
   logout(
     @Session() session,
@@ -34,7 +45,7 @@ export class UsuarioController {
   ){
     session.usuario = undefined;
     req.session.destroy();
-    return session;
+    return 'Deslogueado';
   }
 
   @Post('login')
@@ -71,12 +82,24 @@ export class UsuarioController {
   }
 
   @Get('hola')
-  hola(): string{
+  hola(
+    @Session() session
+  ): string{
+    let contenidoHtml = '<ul>';
+    if(session.usuario){
+      session.usuario.roles.forEach(
+        (nombreRol) => {
+          contenidoHtml = contenidoHtml + `<li>${nombreRol}</li>`;
+        }
+      );
+      contenidoHtml += '</ul>';
+    }
     return `
       <html>
         <head> <title> 3era Guerra Mundial </title></head>
         <body>
-           <h1> Mi primera pagina web </h1>
+           <h1> Mi primera pagina web ${session.usuario? session.usuario.nombre : ''}</h1>
+           ${contenidoHtml}
         </body>
       </html> 
     `;

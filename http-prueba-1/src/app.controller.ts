@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Headers, HttpCode, InternalServerErrorException, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  HttpCode,
+  InternalServerErrorException,
+  Param,
+  Post,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller('juxxi')
