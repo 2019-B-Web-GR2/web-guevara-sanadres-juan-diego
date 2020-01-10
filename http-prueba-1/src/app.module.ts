@@ -18,7 +18,7 @@ import {UsuarioService} from "./usuario/usuario.service";
         username: 'root',
         password: 'root',
         database: 'webP',
-        dropSchema: true,
+        dropSchema: false,
         entities: [
           UsuarioEntity
         ],
