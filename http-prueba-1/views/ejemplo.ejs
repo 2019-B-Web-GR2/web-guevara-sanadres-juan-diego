@@ -1,6 +1,25 @@
-<html>
-    <head> <title> ELSA EW</title></head>
-    <body>
-        <h1> HELLO: <%= datos.nombre%></h1>
-    </body>
-</html>
+<% const version = "1.0.0"%>
+<% const total = 1 + 2;%>
+<% const juxx = {
+  name:'Juan',
+  year: 12,
+  alive: true
+};%>
+<% const arregloNumeros = [1,2,3,4,5,6,7,8,9,0];%>
+<% const urlBase = "https://ejs.co/"%>
+<% arregloNumeros.forEach((number) => {%>
+    <img src="<%=urlBase%><%=number%>.jpg" alt="">
+    <p>Numero: <%= number%></p>
+    <a href="">LINK</a>
+<%});%>
+<%if(juxx.alive){%>
+    <h1>Felicidades estás vivo</h1>
+<%}else{%>
+    <h1>Quien sea. Juan murió</h1>
+<%}%>
+<h1>HELLO: <%= datos.nombre%></h1>
+<p>Version: <%= version%></p>
+<p>Total: <%= total%></p>
+<p>Diccionario: <%= juxx%></p>
+<p>Arreglo: <%= arregloNumeros%></p>
+
