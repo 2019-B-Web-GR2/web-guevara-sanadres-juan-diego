@@ -27,16 +27,58 @@ export class UsuarioController {
 
   }
 
-  @Get('ruta/mostrar-usuarios')
+  @Get('ruta/mostrar-usuario')
   async rutaMostrarUsuarios(
+    @Query('mensaje')mensaje:string,
+    @Query('error')error:string,
     @Res() res
   ){
     const usuarios = await this._usuarioService.buscar();
     res.render('usuario/rutas/buscar-mostrar-usuario',{
       datos:{
         usuarios,
+        mensaje,
+        error,
       },
     });
+  }
+
+  @Get('ruta/crear-usuario')
+  rutaCrearUsuarios(
+    @Query('error')error:string,
+    @Res() res
+  ){
+    res.render('usuario/rutas/crear-usuario',{
+      datos:{
+        error,
+      },
+    });
+  }
+
+  @Get('ruta/editar-usuario/:idUsuario')
+  async rutaEditarUsuarios(
+    @Query('error')error:string,
+    @Query('idUsuario')idUsuario:string,
+    @Res() res
+  ){
+    const consulta = {
+      where: {
+        id: idUsuario,
+      }
+    };
+    try {
+      const arregloUsuario = await this._usuarioService.buscar(consulta);
+      res.render('usuario/rutas/crear-usuario',{
+        datos:{
+          error,
+          usuario: arregloUsuario[0],
+        },
+      });
+    }catch (error) {
+      console.log(error);
+      res.redirect('/usuario/ruta/mostrar-usuario?error=Error editando Usuario');
+    }
+
   }
 
   @Get('ejemploEJS')
@@ -72,7 +114,7 @@ export class UsuarioController {
     @Body('password')password:string,
     @Session() session
   ){
-    console.log('Seesion',session);
+    console.log('Session',session);
     if(username === 'juxx' && password === 'cabrones1'){
       session.usuario = {
         nombre:'Juan',
@@ -137,8 +179,9 @@ export class UsuarioController {
   @Post()
   async crearUsuario(
     @Body() usuario: UsuarioEntity,
+    @Res() res,
     @Session() session
-  ): Promise<UsuarioEntity> {
+  ):Promise<void>{
     if(session.usuario.roles[0] === 'Administrador'){
       const usuarioCreateDTO = new UsuarioCreateDto();
       usuarioCreateDTO.nombre = usuario.nombre;
@@ -146,9 +189,16 @@ export class UsuarioController {
       const errores = await validate(usuarioCreateDTO);
       console.log(errores);
       if(errores.length > 0 ){
-        throw new BadRequestException('Error validando');
+        res.redirect('/usuario/ruta/crear-usuario?error=Error validando');
+        //throw new BadRequestException('Error validando');
       }else{
-        return this._usuarioService.crearUno(usuario);
+        try{
+          await this._usuarioService.crearUno(usuario);
+          res.redirect('/usuario/ruta/mostrar-usuario?mensaje=Usuario Ingresado con Éxito');
+        }catch (error) {
+          console.error(error);
+          res.redirect('/usuario/ruta/crear-usuario?error=Error del Servidor');
+        }
       }
     }else{
       throw new BadRequestException('Usuario no permitido para Crear')
@@ -181,6 +231,30 @@ export class UsuarioController {
       throw new BadRequestException('Usuario no permitido para Actualizar')
     }
   }
+
+  @Post(':id')
+  async eliminarUnUsuarioPost(
+    @Param('id') id: string,
+    @Res() res,
+    @Session() session
+  ):Promise<void>{
+
+    if(session.usuario.roles[0] === 'Administrador'){
+      try{
+        await this._usuarioService
+          .borrarUno(
+            +id
+          );
+        res.redirect(`/usuario/ruta/mostrar-usuario?mensaje=Usuario ID: ${id} eliminado`);
+      }catch (error) {
+        console.error(error);
+        res.redirect('/usuario/ruta/crear-usuario?error=Error del Servidor');
+      }
+    }else{
+      throw new BadRequestException('Usuario no permitido para Eliminar')
+    }
+  }
+
 
   @Delete(':id')
   eliminarUnUsuario(

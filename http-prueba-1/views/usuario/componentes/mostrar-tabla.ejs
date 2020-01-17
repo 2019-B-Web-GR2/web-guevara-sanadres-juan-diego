@@ -1,4 +1,40 @@
 <h1>Tabla de Usuarios</h1>
-<%usuarios.forEach((usuario)=> {%>
-    <p><%=usuario.nombre%></p>
-<%});%>
+
+<table class="table">
+    <thead>
+    <tr> <!--table row-->
+        <th scope="col">ID</th> <!--table header-->
+        <th scope="col">Nombre</th>
+        <th scope="col">Cedula</th>
+        <th scope="col">Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%usuarios.forEach((usuario)=> {%>
+        <tr>
+            <th scope="row">
+                <%=usuario.id%>
+            </th>
+            <td>
+                <%=usuario.nombre%>
+            </td> <!--table detail-->
+            <td>
+                <%=usuario.cedula%>
+            </td>
+            <td>
+                <button type="button"
+                        class="btn btn-info">
+                    Editar
+                </button>
+                <form action="/usuario/<%=usuario.id%>"
+                      method="post">
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Eliminar
+                    </button>
+                </form>
+            </td>
+        </tr>
+    <%});%>
+    </tbody>
+</table>

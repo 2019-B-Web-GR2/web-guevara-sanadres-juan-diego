@@ -17,6 +17,13 @@ export class AppController {
   constructor(private readonly appService: AppService) {
   }
 
+  @Get('login')
+  login(
+    @Res() res,
+  ){
+    res.render('login/login-user')
+  }
+
   @Get()
   getHello(): string {
     return this.appService.getHello();

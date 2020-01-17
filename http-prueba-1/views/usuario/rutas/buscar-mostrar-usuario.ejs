@@ -1,6 +1,26 @@
-<h1>Ruta mostrar Usuario</h1>
-<%- include('../componentes/mostrar-tabla',
+<%- include('../../compartido/cabecera')%>
+<div class="container">
+    <%if(datos.mensaje){%>
+    <div class="alert alert-primary" role="alert">
+        <%=datos.mensaje%>
+    </div>
+    <%}%>
+    <%if(datos.error){%>
+    <div class="alert alert-danger" role="alert">
+        <%=datos.error%>
+    </div>
+    <%}%>
+    <h1>Ruta mostrar Usuario</h1>
+    <a href="/usuario/ruta/crear-usuario">
+        <button type="button"
+                class="btn btn-dark">
+            Crear Usuario
+        </button>
+    </a> <!-- ancla -->
+    <%- include('../componentes/mostrar-tabla',
     {
-        usuarios:datos.usuarios
+    usuarios:datos.usuarios
     }
-)%>
+    )%>
+</div>
+<%- include('../../compartido/pie-de-pagina')%>

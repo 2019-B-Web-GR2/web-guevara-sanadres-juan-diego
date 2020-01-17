@@ -14,7 +14,7 @@ import {UsuarioService} from "./usuario/usuario.service";
         name: 'default', // Nombre cadena de Conex.
         type: 'mysql',
         host: 'localhost',
-        port: 32771,
+        port: 32769,
         username: 'root',
         password: 'root',
         database: 'webP',
@@ -36,15 +36,7 @@ export class AppModule {
   ) {
     const usuarioPromesa = this._usuarioService.encontrarUno(1);
     usuarioPromesa
-      .then(
-        (data) => {
-          console.log('data', data);
-        }
-      )
-      .catch(
-        (error) => {
-          console.log('error',error);
-        }
-      );
+      .then()
+      .catch();
   }
 }
